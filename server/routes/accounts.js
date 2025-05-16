@@ -48,6 +48,8 @@ router.post('/deposit', auth, async (req, res) => {
       receiver: userId,
       amount,
       type: 'deposit',
+      status: 'completed',
+      category: 'deposit',
     });
 
     // Update balance
@@ -109,6 +111,8 @@ router.post('/withdraw', auth, async (req, res) => {
       receiver: userId,
       amount,
       type: 'withdraw',
+      status: 'completed',
+      category: 'withdraw',
     });
 
     // Update balance
@@ -172,6 +176,8 @@ router.post('/transfer', auth, async (req, res) => {
       receiver: receiver._id,
       amount,
       type: 'transfer',
+      status: 'completed',
+      category: 'transfer',
     });
 
     // Update balances
@@ -212,6 +218,19 @@ router.get('/transactions', auth, async (req, res) => {
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching transactions', error: error.message });
+  }
+});
+
+// Get user by account number
+router.get('/by-account-number/:accountNumber', auth, async (req, res) => {
+  try {
+    const user = await User.findOne({ accountNumber: req.params.accountNumber });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ userId: user._id, accountNumber: user.accountNumber, firstName: user.firstName, lastName: user.lastName });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user by account number', error: error.message });
   }
 });
 

@@ -9,12 +9,17 @@ const navLinks = [
   { to: '/withdraw', label: 'Withdraw', icon: '⬇️' },
   { to: '/transfer', label: 'Transfer', icon: '🔄' },
   { to: '/transactions', label: 'Transactions', icon: '📄' },
+  { to: '/request-payment', label: 'Request Payment', icon: '📨' },
+  { to: '/payment-requests', label: 'Payment Requests', icon: '📋' },
+  { to: '/group-expense', label: 'Group Expense', icon: '👥' },
+  { to: '/analytics', label: 'Analytics', icon: '📊' },
+  { to: '/transaction-notes', label: 'Transaction Notes', icon: '📝' },
   { to: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
-const Sidebar = ({ mobileOverlay, open, onClose }) => {
+const Sidebar = ({ isOpen, onOpen, onClose, isMobile }) => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const sidebarRef = useRef();
 
   const handleLogout = () => {
@@ -25,13 +30,13 @@ const Sidebar = ({ mobileOverlay, open, onClose }) => {
 
   // Close on Esc key for accessibility
   useEffect(() => {
-    if (!mobileOverlay || !open) return;
+    if (!isMobile || !isOpen) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose && onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [mobileOverlay, open, onClose]);
+  }, [isMobile, isOpen, onClose]);
 
   // Close on backdrop click
   const handleBackdropClick = (e) => {
@@ -42,24 +47,25 @@ const Sidebar = ({ mobileOverlay, open, onClose }) => {
 
   return (
     <>
-      {mobileOverlay && (
+      {isMobile && !isOpen && (
         <button
           className="sidebar-toggle-btn"
-          aria-label={open ? "Close sidebar" : "Open sidebar"}
-          onClick={onClose}
+          aria-label="Open sidebar"
+          onClick={onOpen}
         >
-          <span style={{ fontSize: 24 }}>{open ? '×' : '☰'}</span>
+          <span style={{ fontSize: 24 }}>☰</span>
         </button>
       )}
-      {mobileOverlay && (
+      {isMobile && isOpen && (
         <div 
-          className={`sidebar-mobile-backdrop${open ? ' open' : ''}`}
+          className="sidebar-mobile-backdrop open"
           onClick={handleBackdropClick}
-          aria-hidden={!open}
+          aria-hidden={!isOpen}
         />
       )}
+      {(!isMobile || isOpen) && (
       <aside
-        className={`sidebar${mobileOverlay ? ' mobile-overlay' : ''}${open ? ' open' : ''}`}
+          className={`sidebar${isMobile ? ' mobile-overlay' : ''}${isOpen ? ' open' : ''}`}
         ref={sidebarRef}
         aria-label="Sidebar navigation"
         tabIndex={-1}
@@ -68,6 +74,19 @@ const Sidebar = ({ mobileOverlay, open, onClose }) => {
           <span className="sidebar-logo-icon">🏦</span>
           <span className="sidebar-logo-text">Zaito</span>
         </div>
+          <div className="user-info">
+            <div className="user-avatar">
+              {user?.firstName?.[0]}{user?.lastName?.[0]}
+            </div>
+            <div className="user-details">
+              <div className="user-name">
+                {user?.firstName} {user?.lastName}
+              </div>
+              <div className="account-number">
+                {user?.accountNumber}
+              </div>
+            </div>
+          </div>
         <nav className="sidebar-nav">
           {navLinks.map((link) => (
             <NavLink
@@ -76,7 +95,7 @@ const Sidebar = ({ mobileOverlay, open, onClose }) => {
               className={({ isActive }) =>
                 'sidebar-link' + (isActive ? ' active' : '')
               }
-              onClick={mobileOverlay ? onClose : undefined}
+                onClick={isMobile ? onClose : undefined}
             >
               <span className="sidebar-link-icon">{link.icon}</span>
               <span className="sidebar-link-label">{link.label}</span>
@@ -89,6 +108,7 @@ const Sidebar = ({ mobileOverlay, open, onClose }) => {
           <span className="sidebar-link-label">Logout</span>
         </button>
       </aside>
+      )}
     </>
   );
 };

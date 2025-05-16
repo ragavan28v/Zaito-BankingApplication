@@ -34,6 +34,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/banking-s
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/accounts', require('./routes/accounts'));
+app.use('/api/requests', require('./routes/requests'));
+app.use('/api/split', require('./routes/split'));
+app.use('/api/transactions', require('./routes/transactions'));
 
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {

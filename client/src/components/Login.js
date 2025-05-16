@@ -22,8 +22,13 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      await login(formData.email, formData.password);
-      navigate('/dashboard');
+      const user = await login(formData.email, formData.password);
+      // If user doesn't have a PIN, redirect to PIN setup
+      if (!user.pin) {
+        navigate('/settings?pinSetup=1');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (error) {
       setError(error.response?.data?.message || 'An error occurred during login');
     }

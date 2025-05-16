@@ -84,13 +84,12 @@ const Transactions = () => {
                   </div>
                   <div className="transaction-details modern">
                     <div><span className="transaction-label">Type:</span> <span className="transaction-value">{transaction.type}</span></div>
-                    <div><span className="transaction-label">Description:</span> <span className="transaction-value">{transaction.description}</span></div>
                     <div><span className="transaction-label">Date:</span> <span className="transaction-value">{new Date(transaction.createdAt).toLocaleString()}</span></div>
                     {showTo && (
-                      <div><span className="transaction-label">To:</span> <span className="transaction-value">{transaction.receiver.firstName} {transaction.receiver.lastName} ({transaction.receiver.accountNumber})</span></div>
+                      <div><span className="transaction-label">To:</span> <span className="transaction-value">{transaction.receiver.accountNumber}</span></div>
                     )}
                     {showFrom && (
-                      <div><span className="transaction-label">From:</span> <span className="transaction-value">{transaction.sender.firstName} {transaction.sender.lastName} ({transaction.sender.accountNumber})</span></div>
+                      <div><span className="transaction-label">From:</span> <span className="transaction-value">{transaction.sender.accountNumber}</span></div>
                     )}
                   </div>
                   <div className={`transaction-amount modern ${amountClass}`}>

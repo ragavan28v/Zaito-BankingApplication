@@ -56,7 +56,8 @@ router.post('/register', async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         accountNumber: user.accountNumber,
-        balance: user.balance
+        balance: user.balance,
+        pin: user.pin
       }
     });
   } catch (error) {
@@ -123,7 +124,8 @@ router.post('/login', async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         accountNumber: user.accountNumber,
-        balance: user.balance
+        balance: user.balance,
+        pin: user.pin
       }
     });
   } catch (error) {

@@ -34,7 +34,7 @@ const Register = () => {
     try {
       const { confirmPassword, ...userData } = formData;
       await register(userData);
-      navigate('/dashboard');
+      navigate('/settings?pinSetup=1');
     } catch (error) {
       setError(error.message || 'An error occurred during registration');
     } finally {

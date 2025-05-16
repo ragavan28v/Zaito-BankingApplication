@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const transactionSchema = new mongoose.Schema({
+const paymentRequestSchema = new mongoose.Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -16,29 +16,15 @@ const transactionSchema = new mongoose.Schema({
     required: true,
     min: 0
   },
-  type: {
-    type: String,
-    enum: ['deposit', 'withdraw', 'transfer'],
-    required: true
-  },
   status: {
     type: String,
-    enum: ['pending', 'completed', 'failed'],
-    default: 'completed'
+    enum: ['pending', 'accepted', 'declined'],
+    default: 'pending'
   },
   note: {
     type: String,
     trim: true,
     maxlength: 200
-  },
-  category: {
-    type: String,
-    default: 'other'
-  },
-  paymentRequest: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'PaymentRequest',
-    default: null
   },
   groupExpense: {
     type: mongoose.Schema.Types.ObjectId,
@@ -48,9 +34,19 @@ const transactionSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
+// Update the updatedAt timestamp before saving
+paymentRequestSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
 
-module.exports = Transaction; 
+const PaymentRequest = mongoose.model('PaymentRequest', paymentRequestSchema);
+
+module.exports = PaymentRequest; 

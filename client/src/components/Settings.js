@@ -22,10 +22,13 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isPinSetup) {
+    // If user already has a PIN and is trying to access PIN setup, redirect to dashboard
+    if (isPinSetup && user?.pin) {
+      navigate('/dashboard', { replace: true });
+    } else if (isPinSetup) {
       setMessage('Please set up your 4-digit PIN to continue using the banking system.');
     }
-  }, [isPinSetup]);
+  }, [isPinSetup, user?.pin, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -75,15 +78,16 @@ const Settings = () => {
       
       // Update user state with the response data
       if (response.data.user) {
-        setUser(response.data.user);
+        // First update the user state
+        await setUser(response.data.user);
         setMessage(response.data.message || 'PIN updated successfully!');
         setFormData({ ...formData, pin: '', newPin: '', confirmNewPin: '' });
         
-        // If this was a PIN setup, redirect to dashboard after a short delay
+        // If this was a PIN setup, wait for state to update before redirecting
         if (isPinSetup) {
-          setTimeout(() => {
-            navigate('/dashboard');
-          }, 1500);
+          // Add a small delay to ensure state updates are processed
+          await new Promise(resolve => setTimeout(resolve, 100));
+          navigate('/dashboard', { replace: true });
         }
       } else {
         throw new Error('No user data in response');
@@ -100,6 +104,11 @@ const Settings = () => {
       setLoading(false);
     }
   };
+
+  // If user has a PIN and is in PIN setup mode, don't render the form
+  if (user?.pin && isPinSetup) {
+    return null;
+  }
 
   return (
     <div className="main-page-wrap form-page">
@@ -126,56 +135,58 @@ const Settings = () => {
           </form>
         )}
         
-        <form onSubmit={handlePinUpdate}>
-          <h3 style={{ marginBottom: 16 }}>{user.pin ? 'Change PIN' : 'Set Up PIN'}</h3>
-          {user.pin && (
+        {(!user?.pin || !isPinSetup) && (
+          <form onSubmit={handlePinUpdate}>
+            <h3 style={{ marginBottom: 16 }}>{user?.pin ? 'Change PIN' : 'Set Up PIN'}</h3>
+            {user?.pin && (
+              <div className="form-group">
+                <label className="form-label">Current PIN</label>
+                <input 
+                  type="password" 
+                  name="pin" 
+                  className="form-input" 
+                  value={formData.pin} 
+                  onChange={handleChange} 
+                  maxLength={4} 
+                  inputMode="numeric" 
+                  placeholder="Enter current PIN" 
+                  required
+                />
+              </div>
+            )}
             <div className="form-group">
-              <label className="form-label">Current PIN</label>
+              <label className="form-label">{user?.pin ? 'New PIN' : 'PIN'}</label>
               <input 
                 type="password" 
-                name="pin" 
+                name="newPin" 
                 className="form-input" 
-                value={formData.pin} 
+                value={formData.newPin} 
                 onChange={handleChange} 
+                required 
                 maxLength={4} 
                 inputMode="numeric" 
-                placeholder="Enter current PIN" 
-                required
+                placeholder={`Enter ${user?.pin ? 'new' : ''} 4-digit PIN`} 
               />
             </div>
-          )}
-          <div className="form-group">
-            <label className="form-label">{user.pin ? 'New PIN' : 'PIN'}</label>
-            <input 
-              type="password" 
-              name="newPin" 
-              className="form-input" 
-              value={formData.newPin} 
-              onChange={handleChange} 
-              required 
-              maxLength={4} 
-              inputMode="numeric" 
-              placeholder={`Enter ${user.pin ? 'new' : ''} 4-digit PIN`} 
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Confirm {user.pin ? 'New ' : ''}PIN</label>
-            <input 
-              type="password" 
-              name="confirmNewPin" 
-              className="form-input" 
-              value={formData.confirmNewPin} 
-              onChange={handleChange} 
-              required 
-              maxLength={4} 
-              inputMode="numeric" 
-              placeholder={`Confirm ${user.pin ? 'new' : ''} PIN`} 
-            />
-          </div>
-          <button type="submit" className="btn-badge btn-block" disabled={loading}>
-            {loading ? 'Processing...' : (user.pin ? 'Update PIN' : 'Set PIN')}
-          </button>
-        </form>
+            <div className="form-group">
+              <label className="form-label">Confirm {user?.pin ? 'New ' : ''}PIN</label>
+              <input 
+                type="password" 
+                name="confirmNewPin" 
+                className="form-input" 
+                value={formData.confirmNewPin} 
+                onChange={handleChange} 
+                required 
+                maxLength={4} 
+                inputMode="numeric" 
+                placeholder={`Confirm ${user?.pin ? 'new' : ''} PIN`} 
+              />
+            </div>
+            <button type="submit" className="btn-badge btn-block" disabled={loading}>
+              {loading ? 'Processing...' : (user?.pin ? 'Update PIN' : 'Set PIN')}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

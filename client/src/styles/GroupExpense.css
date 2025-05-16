@@ -1,0 +1,386 @@
+.group-expense-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.group-expense-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.group-expense-header h2 {
+  color: #333;
+  margin: 0;
+}
+
+.create-expense-button {
+  background-color: #4a90e2;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-expense-button:hover {
+  background-color: #357abd;
+}
+
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.expense-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.expense-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.expense-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.expense-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.expense-status.active {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.expense-status.completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.expense-status.cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.expense-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.amount,
+.split-method,
+.category {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.label {
+  font-weight: 500;
+  color: #666;
+  min-width: 120px;
+}
+
+.value {
+  color: #333;
+}
+
+.members {
+  margin-top: 0.5rem;
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  overflow-x: auto;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.member-item > span {
+  max-width: 100px;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  display: inline-block;
+}
+
+.member-item .status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-item .status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.member-item .status.paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.expense-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pay-button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.pay-button:hover {
+  background-color: #218838;
+}
+
+.settle-button {
+  background-color: #17a2b8;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.settle-button:hover {
+  background-color: #138496;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.members-section {
+  margin-top: 1.5rem;
+}
+
+.member-input {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.member-input input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.remove-member {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-member:hover {
+  background-color: #c82333;
+}
+
+.add-member {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.add-member:hover {
+  background-color: #5a6268;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-actions button[type="submit"] {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.modal-actions button[type="submit"]:hover {
+  background-color: #357abd;
+}
+
+.modal-actions button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+}
+
+.modal-actions button[type="button"]:hover {
+  background-color: #5a6268;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.no-expenses {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.error-message {
+  color: #dc3545;
+  padding: 0.75rem;
+  background-color: #f8d7da;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .group-expense-container {
+    margin: 1.5rem auto;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+  }
+  .expense-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    margin: 0 auto 1rem auto;
+    overflow: visible;
+  }
+  .members-list {
+    overflow-x: visible;
+  }
+  .member-item {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .member-item > span {
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+} 

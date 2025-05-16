@@ -14,8 +14,8 @@ const PrivateRoute = ({ children }) => {
     return <Navigate to="/login" />;
   }
 
-  // If user has no PIN and is not on settings page, redirect to settings
-  if (!user.pin && location.pathname !== '/settings') {
+  // Only redirect to PIN setup if user has no PIN and is not already on settings page
+  if (!user.pin && !location.pathname.includes('/settings')) {
     return <Navigate to="/settings?pinSetup=1" replace />;
   }
 

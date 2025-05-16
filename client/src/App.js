@@ -8,6 +8,11 @@ import Transfer from './components/Transfer';
 import Transactions from './components/Transactions';
 import Deposit from './components/Deposit';
 import Withdraw from './components/Withdraw';
+import RequestPayment from './components/RequestPayment';
+import PaymentRequests from './components/PaymentRequests';
+import GroupExpense from './components/GroupExpense';
+import Analytics from './components/Analytics';
+import TransactionNotes from './components/TransactionNotes';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Landing from './components/Landing';
@@ -22,72 +27,129 @@ function AppContent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 900;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(false);
+      }
+    };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleSidebarToggle = () => setSidebarOpen((open) => !open);
+  const handleSidebarToggle = () => setSidebarOpen(prev => !prev);
   const handleSidebarClose = () => setSidebarOpen(false);
 
   if (loading) return null;
+
   return (
-    <>
+    <div className="app-container">
       {user && (
-        <>
-          {isMobile && !sidebarOpen && (
-            <button
-              className="sidebar-toggle-btn"
-              aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
-              onClick={handleSidebarToggle}
-              style={{ position: 'fixed', top: 18, left: 18, zIndex: 400 }}
-            >
-              <span style={{ fontSize: 24 }}>&#9776;</span>
-            </button>
-          )}
-          {isMobile && sidebarOpen && (
-            <div
-              className={`sidebar-mobile-backdrop open`}
-              onClick={handleSidebarClose}
-              tabIndex={-1}
-              aria-label="Close sidebar"
-              style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(44,62,80,0.13)', zIndex: 350 }}
-            />
-          )}
-          {(sidebarOpen && isMobile) || !isMobile ? (
             <Sidebar
-              mobileOverlay={isMobile}
-              open={sidebarOpen || !isMobile}
-              onClose={handleSidebarClose}
+          isOpen={sidebarOpen}
+          onOpen={() => setSidebarOpen(true)}
+          onClose={() => setSidebarOpen(false)}
+          isMobile={isMobile}
             />
-          ) : null}
-        </>
       )}
-      {user ? (
         <div className="main-content">
-          <div className="App">
-            <div className="container">
-              <Routes>
-                <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                <Route path="/transfer" element={<PrivateRoute><Transfer /></PrivateRoute>} />
-                <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />
-                <Route path="/withdraw" element={<PrivateRoute><Withdraw /></PrivateRoute>} />
-                <Route path="/transactions" element={<PrivateRoute><Transactions /></PrivateRoute>} />
-                <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
-              </Routes>
-            </div>
-          </div>
-        </div>
-      ) : (
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/transfer"
+            element={
+              <PrivateRoute>
+                <Transfer />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <PrivateRoute>
+                <Transactions />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/deposit"
+            element={
+              <PrivateRoute>
+                <Deposit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/withdraw"
+            element={
+              <PrivateRoute>
+                <Withdraw />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/request-payment"
+            element={
+              <PrivateRoute>
+                <RequestPayment />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/payment-requests"
+            element={
+              <PrivateRoute>
+                <PaymentRequests />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/group-expense"
+            element={
+              <PrivateRoute>
+                <GroupExpense />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <PrivateRoute>
+                <Analytics />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/transaction-notes"
+            element={
+              <PrivateRoute>
+                <TransactionNotes />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      )}
-    </>
+      </div>
+    </div>
   );
 }
 
