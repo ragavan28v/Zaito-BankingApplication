@@ -191,11 +191,11 @@ const Analytics = () => {
         <div className="summary-cards">
           <div className="summary-card">
             <h3>Total Spent</h3>
-            <p>${analyticsData.summary.totalSpent.toFixed(2)}</p>
+            <p>₹{analyticsData.summary.totalSpent.toFixed(2)}</p>
           </div>
           <div className="summary-card">
             <h3>Average Transaction</h3>
-            <p>${analyticsData.summary.averageTransaction.toFixed(2)}</p>
+            <p>₹{analyticsData.summary.averageTransaction.toFixed(2)}</p>
           </div>
           <div className="summary-card">
             <h3>Total Transactions</h3>
@@ -238,7 +238,7 @@ const Analytics = () => {
                     <span className="expense-description">{expense.description || 'No description'}</span>
                     <span className="expense-date">{expense.date || 'No date'}</span>
                   </div>
-                  <span className="expense-amount">${Number(expense.amount || 0).toFixed(2)}</span>
+                  <span className="expense-amount">₹{Number(expense.amount || 0).toFixed(2)}</span>
                 </div>
               ))}
             </div>

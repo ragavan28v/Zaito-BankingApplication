@@ -93,7 +93,7 @@ const Transactions = () => {
                     )}
                   </div>
                   <div className={`transaction-amount modern ${amountClass}`}>
-                    {sign}<span className="transaction-amount-value">₹{amount}</span>
+                    {sign}₹{Math.abs(amount).toLocaleString()}
                   </div>
                 </div>
               );

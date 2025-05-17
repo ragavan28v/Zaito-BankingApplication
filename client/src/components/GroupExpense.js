@@ -288,7 +288,7 @@ const GroupExpense = () => {
                 <div className="expense-details">
                   <div className="amount">
                     <span className="label">Total Amount:</span>
-                    <span className="value">${expense.totalAmount.toFixed(2)}</span>
+                    <span className="value">₹{expense.totalAmount.toFixed(2)}</span>
                   </div>
 
                   <div className="split-method">
@@ -309,7 +309,7 @@ const GroupExpense = () => {
                         return (
                           <div key={index} className="member-item">
                             <span>{member.user.accountNumber}</span>
-                            <span>${member.amount.toFixed(2)}</span>
+                            <span>₹{member.amount.toFixed(2)}</span>
                             <span className={`status ${displayStatus}`}>
                               {displayStatus}
                             </span>

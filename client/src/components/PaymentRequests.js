@@ -165,7 +165,7 @@ const PaymentRequests = () => {
 
                   <div className="amount">
                     <span className="label">Amount:</span>
-                    <span className="value">${request.amount.toFixed(2)}</span>
+                    <span className="value">₹{request.amount.toFixed(2)}</span>
                   </div>
 
                   {request.note && (
