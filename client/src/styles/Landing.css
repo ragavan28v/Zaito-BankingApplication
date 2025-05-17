@@ -1,0 +1,229 @@
+/* Landing page specific styles */
+.landing-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 0.2rem;
+  margin-bottom: 0.1rem;
+  position: relative;
+}
+.landing-header-inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+}
+.landing-logo {
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+.landing-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #1a2940;
+  letter-spacing: -1px;
+  margin-left: 0.1rem;
+}
+.landing-tagline {
+  width: 100%;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #4a90e2;
+  margin-top: 0.1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  display: block;
+  position: relative;
+}
+.landing-content-wrapper {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  padding: 0.2rem 0 0.2rem 0;
+}
+.landing-welcome {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #1a2940;
+  text-align: center;
+  margin-bottom: 0.15rem;
+  margin-top: 0.05rem;
+}
+.landing-intro {
+  font-size: 1.18rem;
+  color: #222;
+  text-align: center;
+  margin-bottom: 0.15rem;
+  line-height: 1.6;
+}
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.3rem 0.5rem;
+  width: 100%;
+  max-width: 700px;
+  margin: 0.1rem 0 0.2rem 0;
+}
+.landing-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f7f9fb;
+  border-radius: 10px;
+  padding: 1rem 0.7rem 0.8rem 0.7rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+  min-width: 120px;
+}
+.feature-icon {
+  font-size: 1.7rem;
+  margin-bottom: 0.3rem;
+}
+.feature-title {
+  font-weight: 700;
+  color: #1a2940;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+.feature-desc {
+  color: #666;
+  font-size: 0.97rem;
+  text-align: center;
+}
+.landing-btn-main {
+  font-size: 1.1rem;
+  padding: 1rem 2.2rem;
+  border-radius: 14px;
+  margin: 0 0.5rem;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+}
+.landing-btn-main:hover {
+  background: linear-gradient(90deg, #b6d0ff 0%, #e3eafc 100%);
+  color: #274685;
+}
+.landing-trust {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.2rem 0 0.1rem 0;
+}
+.trust-badge {
+  background: #e3eafc;
+  color: #274685;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+.trust-quote {
+  color: #888;
+  font-style: italic;
+  font-size: 0.97rem;
+}
+.landing-footer {
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 0.97rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.05rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.footer-links a {
+  color: #4a90e2;
+  text-decoration: none;
+  margin: 0 0.2rem;
+  font-weight: 500;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+.landing-top-actions {
+  position: absolute;
+  top: 1.2rem;
+  right: 2.2rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+@media (min-width: 1200px) {
+  .landing-content-wrapper {
+    max-width: 1200px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .landing-features {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1100px;
+  }
+}
+@media (max-width: 900px) {
+  .landing-top-actions {
+    position: static;
+    margin: 0.2rem auto 0.5rem auto;
+    justify-content: center;
+    width: 100%;
+    gap: 0.3rem;
+  }
+  .landing-content-wrapper {
+    max-width: 98vw;
+    padding: 0.5rem 0.2rem;
+    gap: 0.5rem;
+  }
+  .landing-features {
+    grid-template-columns: 1fr 1fr;
+    max-width: 98vw;
+    gap: 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .landing-top-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
+  .landing-content-wrapper {
+    max-width: 99vw;
+    padding: 0.3rem 0.05rem;
+    gap: 0.3rem;
+  }
+  .landing-welcome {
+    font-size: 1.2rem;
+  }
+  .landing-intro {
+    font-size: 0.97rem;
+  }
+  .landing-features {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+    max-width: 99vw;
+  }
+  .landing-btn-main {
+    font-size: 0.97rem;
+    padding: 0.3rem 0.5rem;
+    min-width: 90px;
+  }
+  .trust-badge {
+    font-size: 0.92rem;
+    padding: 0.1rem 0.3rem;
+  }
+  .trust-quote {
+    font-size: 0.92rem;
+  }
+  .landing-footer {
+    font-size: 0.92rem;
+    margin-top: 0.3rem;
+  }
+} 

@@ -219,14 +219,12 @@ const GroupExpense = () => {
             Create New Expense
           </button>
         </div>
-
         {error && <div className="error-message">{error}</div>}
-
-        {expenses.length === 0 ? (
-          <p className="no-expenses">No group expenses found</p>
-        ) : (
-          <div className="expenses-list">
-            {expenses.map((expense) => (
+        <div className="expenses-list">
+          {expenses.length === 0 ? (
+            <p className="no-expenses">No group expenses found</p>
+          ) : (
+            expenses.map((expense) => (
               <div key={expense._id} className="expense-card">
                 <div className="expense-header">
                   <h3>{expense.title}</h3>
@@ -292,13 +290,18 @@ const GroupExpense = () => {
                   )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-
+            ))
+          )}
+        </div>
         {showCreateModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
+          <div
+            className="content-modal-overlay"
+            onClick={() => setShowCreateModal(false)}
+          >
+            <div
+              className="content-modal"
+              onClick={e => e.stopPropagation()}
+            >
               <h3>Create Group Expense</h3>
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -412,7 +415,6 @@ const GroupExpense = () => {
             </div>
           </div>
         )}
-
         {showPinModal && (
           <div className="modal-overlay">
             <div className="modal-content">

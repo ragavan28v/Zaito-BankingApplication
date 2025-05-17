@@ -12,7 +12,6 @@ import RequestPayment from './components/RequestPayment';
 import PaymentRequests from './components/PaymentRequests';
 import GroupExpense from './components/GroupExpense';
 import Analytics from './components/Analytics';
-import TransactionNotes from './components/TransactionNotes';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Landing from './components/Landing';
@@ -43,17 +42,20 @@ function AppContent() {
 
   if (loading) return null;
 
+  // Check if current route is a public route (landing, login, register)
+  const isPublicRoute = ['/', '/login', '/register'].includes(location.pathname);
+
   return (
     <div className="app-container">
-      {user && (
+      {user && !isPublicRoute && (
             <Sidebar
           isOpen={sidebarOpen}
           onOpen={() => setSidebarOpen(true)}
           onClose={() => setSidebarOpen(false)}
           isMobile={isMobile}
-            />
+        />
       )}
-        <div className="main-content">
+      <div className={`main-content ${user && !isPublicRoute ? 'with-sidebar' : 'full-width'}`}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -127,14 +129,6 @@ function AppContent() {
             element={
               <PrivateRoute>
                 <Analytics />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/transaction-notes"
-            element={
-              <PrivateRoute>
-                <TransactionNotes />
               </PrivateRoute>
             }
           />

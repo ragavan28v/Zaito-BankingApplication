@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import '../styles/PaymentRequests.css';
@@ -12,10 +12,33 @@ const PaymentRequests = () => {
   const [pin, setPin] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const modalRef = useRef(null);
 
   useEffect(() => {
     fetchRequests();
   }, []);
+
+  // Center modal vertically in visible area
+  useEffect(() => {
+    function centerModal() {
+      if (showPinModal && modalRef.current) {
+        const modal = modalRef.current;
+        const modalHeight = modal.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const top = Math.max(0, window.scrollY + (viewportHeight - modalHeight) / 2);
+        modal.style.top = `${top}px`;
+      }
+    }
+    if (showPinModal) {
+      centerModal();
+      window.addEventListener('scroll', centerModal);
+      window.addEventListener('resize', centerModal);
+    }
+    return () => {
+      window.removeEventListener('scroll', centerModal);
+      window.removeEventListener('resize', centerModal);
+    };
+  }, [showPinModal]);
 
   const fetchRequests = async () => {
     try {
@@ -70,6 +93,42 @@ const PaymentRequests = () => {
       <svg className="main-side-svg right" width="120" height="320" viewBox="0 0 120 320" fill="none" xmlns="http://www.w3.org/2000/svg">
         <ellipse cx="60" cy="160" rx="60" ry="160" fill="#b6d0ff" fillOpacity="0.25"/>
       </svg>
+      {showPinModal && (
+        <div
+          className="content-modal-overlay"
+          onClick={() => {
+            setShowPinModal(false);
+            setPin('');
+            setSelectedRequest(null);
+          }}
+        >
+          <div
+            className="modal-content"
+            ref={modalRef}
+            style={{ position: 'absolute', left: 0, right: 0, margin: '0 auto' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3>Enter PIN to Accept Payment</h3>
+            <input
+              type="password"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              placeholder="Enter your PIN"
+              maxLength="4"
+              pattern="[0-9]*"
+              inputMode="numeric"
+            />
+            <div className="modal-actions">
+              <button onClick={handlePinSubmit}>Confirm</button>
+              <button onClick={() => {
+                setShowPinModal(false);
+                setPin('');
+                setSelectedRequest(null);
+              }}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="payment-requests-container">
         <h2>Payment Requests</h2>
         {error && <div className="error-message">{error}</div>}
@@ -139,31 +198,6 @@ const PaymentRequests = () => {
                 )}
               </div>
             ))}
-          </div>
-        )}
-
-        {showPinModal && (
-          <div className="modal-overlay">
-            <div className="modal-content">
-              <h3>Enter PIN to Accept Payment</h3>
-              <input
-                type="password"
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
-                placeholder="Enter your PIN"
-                maxLength="4"
-                pattern="[0-9]*"
-                inputMode="numeric"
-              />
-              <div className="modal-actions">
-                <button onClick={handlePinSubmit}>Confirm</button>
-                <button onClick={() => {
-                  setShowPinModal(false);
-                  setPin('');
-                  setSelectedRequest(null);
-                }}>Cancel</button>
-              </div>
-            </div>
           </div>
         )}
       </div>

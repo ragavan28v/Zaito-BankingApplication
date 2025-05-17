@@ -35,8 +35,8 @@ const Transactions = () => {
       <svg className="main-side-svg right" width="120" height="320" viewBox="0 0 120 320" fill="none" xmlns="http://www.w3.org/2000/svg">
         <ellipse cx="60" cy="160" rx="60" ry="160" fill="#b6d0ff" fillOpacity="0.25"/>
       </svg>
+      <h2 className="transactions-heading">Transaction History</h2>
       <div className="main-card transactions-wide">
-        <h2>Transaction History</h2>
         <div className="transaction-list">
           {transactions.length === 0 ? (
             <p>No transactions found</p>
@@ -99,12 +99,6 @@ const Transactions = () => {
               );
             })
           )}
-        </div>
-        <div className="main-badge">
-          <span className="main-badge-inner">
-            <span className="main-badge-icon" role="img" aria-label="shield">🛡️</span>
-            Secure History
-          </span>
         </div>
       </div>
       <svg className="main-bg-svg" width="100%" height="120" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">

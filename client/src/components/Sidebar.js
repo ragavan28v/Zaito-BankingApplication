@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Sidebar.css';
 
@@ -13,20 +13,29 @@ const navLinks = [
   { to: '/payment-requests', label: 'Payment Requests', icon: '📋' },
   { to: '/group-expense', label: 'Group Expense', icon: '👥' },
   { to: '/analytics', label: 'Analytics', icon: '📊' },
-  { to: '/transaction-notes', label: 'Transaction Notes', icon: '📝' },
   { to: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 const Sidebar = ({ isOpen, onOpen, onClose, isMobile }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, user } = useAuth();
   const sidebarRef = useRef();
+  const navRef = useRef();
+  const activeLinkRef = useRef();
 
   const handleLogout = () => {
     logout();
     navigate('/');
     if (onClose) onClose();
   };
+
+  // Scroll active link into view on mount and route change
+  useEffect(() => {
+    if (activeLinkRef.current && navRef.current) {
+      activeLinkRef.current.scrollIntoView({ block: 'center', behavior: 'auto' });
+    }
+  }, [location.pathname]);
 
   // Close on Esc key for accessibility
   useEffect(() => {
@@ -87,8 +96,10 @@ const Sidebar = ({ isOpen, onOpen, onClose, isMobile }) => {
               </div>
             </div>
           </div>
-        <nav className="sidebar-nav">
-          {navLinks.map((link) => (
+        <nav className="sidebar-nav" ref={navRef}>
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.to;
+            return (
             <NavLink
               key={link.to}
               to={link.to}
@@ -96,12 +107,14 @@ const Sidebar = ({ isOpen, onOpen, onClose, isMobile }) => {
                 'sidebar-link' + (isActive ? ' active' : '')
               }
                 onClick={isMobile ? onClose : undefined}
+                ref={isActive ? activeLinkRef : null}
             >
               <span className="sidebar-link-icon">{link.icon}</span>
               <span className="sidebar-link-label">{link.label}</span>
               <span className="sidebar-link-highlight" />
             </NavLink>
-          ))}
+            );
+          })}
         </nav>
         <button className="sidebar-logout" onClick={handleLogout}>
           <span className="sidebar-link-icon">🚪</span>

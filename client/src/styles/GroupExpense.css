@@ -19,25 +19,114 @@
   margin: 0;
 }
 
-.create-expense-button {
-  background-color: #4a90e2;
-  color: white;
-  padding: 0.75rem 1.5rem;
+.create-expense-button, .add-member, .modal-actions button[type="button"], .modal-actions button[type="submit"] {
+  background: linear-gradient(90deg, #4a90e2 0%, #b6d0ff 100%);
+  color: #fff;
   border: none;
-  border-radius: 5px;
-  font-weight: 500;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+  width: 100%;
+}
+.create-expense-button:hover, .add-member:hover, .modal-actions button[type="button"]:hover, .modal-actions button[type="submit"]:hover {
+  background: linear-gradient(90deg, #b6d0ff 0%, #4a90e2 100%);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
 }
 
-.create-expense-button:hover {
-  background-color: #357abd;
+.pay-button, .settle-button {
+  background: linear-gradient(90deg, #28a745 0%, #a8e063 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+  width: 100%;
+}
+.pay-button:hover, .settle-button:hover {
+  background: linear-gradient(90deg, #a8e063 0%, #28a745 100%);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
+}
+
+.remove-member {
+  background: linear-gradient(90deg, #dc3545 0%, #ffb6b6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+  width: 100%;
+}
+.remove-member:hover {
+  background: linear-gradient(90deg, #ffb6b6 0%, #dc3545 100%);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
+}
+
+.request-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.request-actions .accept-button, .request-actions .decline-button {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.group-expense-content {
+  display: flex;
+  gap: 2rem;
 }
 
 .expenses-list {
+  flex: 2;
+  min-width: 0;
+}
+
+.side-form-panel {
+  flex: 1;
+  min-width: 320px;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: stretch;
+  margin-top: 0.5rem;
+  height: fit-content;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 
 .expense-card {
@@ -161,38 +250,6 @@
   margin-top: 1rem;
 }
 
-.pay-button {
-  background-color: #28a745;
-  color: white;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-}
-
-.pay-button:hover {
-  background-color: #218838;
-}
-
-.settle-button {
-  background-color: #17a2b8;
-  color: white;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-}
-
-.settle-button:hover {
-  background-color: #138496;
-}
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -267,36 +324,6 @@
   font-size: 1rem;
 }
 
-.remove-member {
-  background-color: #dc3545;
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.remove-member:hover {
-  background-color: #c82333;
-}
-
-.add-member {
-  background-color: #6c757d;
-  color: white;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-}
-
-.add-member:hover {
-  background-color: #5a6268;
-}
-
 .modal-actions {
   display: flex;
   gap: 1rem;
@@ -311,24 +338,6 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-.modal-actions button[type="submit"] {
-  background-color: #4a90e2;
-  color: white;
-}
-
-.modal-actions button[type="submit"]:hover {
-  background-color: #357abd;
-}
-
-.modal-actions button[type="button"] {
-  background-color: #6c757d;
-  color: white;
-}
-
-.modal-actions button[type="button"]:hover {
-  background-color: #5a6268;
 }
 
 .loading {
@@ -383,4 +392,127 @@
     word-break: break-word;
     overflow-wrap: break-word;
   }
+  .group-expense-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .create-expense-button {
+    width: 100% !important;
+    margin: 0;
+    font-size: 0.92rem;
+    white-space: nowrap;
+  }
+  .member-input {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .remove-member {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .group-expense-content {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .side-form-panel {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.2rem 0.7rem;
+  }
+}
+
+.content-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.12);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 10;
+}
+
+.content-modal {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  padding: 1.2rem 1.2rem;
+  min-width: 320px;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 2rem;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+}
+
+.content-modal form {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.content-modal .form-group,
+.content-modal .members-section {
+  margin-bottom: 0.2rem;
+  gap: 0.1rem;
+}
+
+.content-modal .member-input {
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.content-modal .modal-actions {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 600px) {
+  .content-modal {
+    padding: 0.7rem 0.3rem;
+    min-width: 0;
+    max-width: 98vw;
+    margin-top: 0.7rem;
+  }
+}
+
+.create-expense-button {
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* Custom scrollbar for modal (Webkit browsers) */
+.content-modal::-webkit-scrollbar {
+  width: 8px;
+  background: #f0f4fa;
+}
+.content-modal::-webkit-scrollbar-thumb {
+  background: #b6d0ff;
+  border-radius: 6px;
+}
+.content-modal::-webkit-scrollbar-thumb:hover {
+  background: #4a90e2;
+}
+.content-modal::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+/* Custom scrollbar for modal (Firefox) */
+.content-modal {
+  scrollbar-width: thin;
+  scrollbar-color: #b6d0ff #f0f4fa;
 } 
