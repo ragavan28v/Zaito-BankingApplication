@@ -311,9 +311,10 @@
 
 .member-input {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+  width: 100%;
 }
 
 .member-input input {
@@ -515,4 +516,40 @@
 .content-modal {
   scrollbar-width: thin;
   scrollbar-color: #b6d0ff #f0f4fa;
+}
+
+/* Add styles for account input with trash icon */
+.account-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.account-input-wrapper input[type="text"] {
+  flex: 1;
+  padding-right: 2.2em; /* space for icon */
+}
+
+.remove-member-icon {
+  position: absolute;
+  right: 0.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #e57373;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  transition: color 0.2s;
+}
+.remove-member-icon:hover, .remove-member-icon:focus {
+  color: #b71c1c;
+}
+
+/* Ensure member-input rows are vertical and not horizontally scrollable */
+.members-section {
+  overflow-x: unset;
 } 

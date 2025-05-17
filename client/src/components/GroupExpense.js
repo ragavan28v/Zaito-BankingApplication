@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import '../styles/GroupExpense.css';
@@ -19,10 +19,36 @@ const GroupExpense = () => {
     members: [{ accountNumber: '', amount: '' }],
     category: 'other'
   });
+  const [showSettleConfirm, setShowSettleConfirm] = useState(false);
+  const [settleExpenseId, setSettleExpenseId] = useState(null);
+  const [settleForce, setSettleForce] = useState(false);
+  const [settleMessage, setSettleMessage] = useState('');
+  const settleModalRef = useRef(null);
 
   useEffect(() => {
     fetchExpenses();
   }, []);
+
+  useEffect(() => {
+    function centerSettleModal() {
+      if (showSettleConfirm && settleModalRef.current) {
+        const modal = settleModalRef.current;
+        const modalHeight = modal.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const top = Math.max(0, window.scrollY + (viewportHeight - modalHeight) / 2);
+        modal.style.top = `${top}px`;
+      }
+    }
+    if (showSettleConfirm) {
+      centerSettleModal();
+      window.addEventListener('scroll', centerSettleModal);
+      window.addEventListener('resize', centerSettleModal);
+    }
+    return () => {
+      window.removeEventListener('scroll', centerSettleModal);
+      window.removeEventListener('resize', centerSettleModal);
+    };
+  }, [showSettleConfirm]);
 
   const fetchExpenses = async () => {
     try {
@@ -155,12 +181,38 @@ const GroupExpense = () => {
     }
   };
 
-  const handleSettle = async (expenseId) => {
+  const handleSettle = async (expense) => {
+    // Check if all members are paid
+    const allPaid = expense.members.every(m => m.status === 'paid');
+    if (!allPaid) {
+      setSettleExpenseId(expense._id);
+      setSettleForce(false);
+      setSettleMessage('Not all members have paid. Are you sure you want to settle and mark this expense as completed?');
+      setShowSettleConfirm(true);
+      return;
+    }
     try {
-      await axios.post(`/api/split/expenses/${expenseId}/settle`);
+      await axios.post(`/api/split/expenses/${expense._id}/settle`);
       fetchExpenses();
     } catch (error) {
-      setError('Error settling expense');
+      setError(error.response?.data?.message || 'Error settling expense');
+    }
+  };
+
+  const confirmSettle = async () => {
+    try {
+      await axios.post(`/api/split/expenses/${settleExpenseId}/settle`, { force: true });
+      setShowSettleConfirm(false);
+      setSettleExpenseId(null);
+      setSettleForce(false);
+      setSettleMessage('');
+      fetchExpenses();
+    } catch (error) {
+      setError(error.response?.data?.message || 'Error settling expense');
+      setShowSettleConfirm(false);
+      setSettleExpenseId(null);
+      setSettleForce(false);
+      setSettleMessage('');
     }
   };
 
@@ -269,14 +321,20 @@ const GroupExpense = () => {
                 </div>
 
                 <div className="expense-actions">
-                  {expense.status === 'active' && expense.creator._id === user.id && (
-                    <button
-                      className="settle-button"
-                      onClick={() => handleSettle(expense._id)}
-                    >
-                      Settle Expense
-                    </button>
-                  )}
+                  {expense.status === 'active' &&
+                    (
+                      expense.creator._id === user._id ||
+                      expense.creator._id === user.id ||
+                      expense.creator.id === user._id ||
+                      expense.creator.id === user.id
+                    ) && (
+                      <button
+                        className="settle-button"
+                        onClick={() => handleSettle(expense)}
+                      >
+                        Settle Expense
+                      </button>
+                    )}
                   
                   {/* Add payment button for members who haven't paid */}
                   {expense.status === 'active' && 
@@ -364,13 +422,27 @@ const GroupExpense = () => {
                   <label>Members</label>
                   {formData.members.map((member, index) => (
                     <div key={index} className="member-input">
-                      <input
-                        type="text"
-                        placeholder="Account Number"
-                        value={member.accountNumber}
-                        onChange={(e) => handleMemberChange(index, 'accountNumber', e.target.value)}
-                        required
-                      />
+                      <div className="account-input-wrapper">
+                        <input
+                          type="text"
+                          placeholder="Account Number"
+                          value={member.accountNumber}
+                          onChange={(e) => handleMemberChange(index, 'accountNumber', e.target.value)}
+                          required
+                        />
+                        {index > 0 && (
+                          <span
+                            className="remove-member-icon"
+                            onClick={() => removeMember(index)}
+                            title="Remove member"
+                            tabIndex={0}
+                            role="button"
+                          >
+                            {/* Trash SVG icon */}
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                          </span>
+                        )}
+                      </div>
                       {formData.splitMethod === 'custom' && (
                         <input
                           type="number"
@@ -381,15 +453,6 @@ const GroupExpense = () => {
                           min="0.01"
                           step="0.01"
                         />
-                      )}
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          className="remove-member"
-                          onClick={() => removeMember(index)}
-                        >
-                          Remove
-                        </button>
                       )}
                     </div>
                   ))}
@@ -435,6 +498,23 @@ const GroupExpense = () => {
                   setPin('');
                   setSelectedExpense(null);
                 }}>Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+        {showSettleConfirm && (
+          <div className="content-modal-overlay" onClick={() => setShowSettleConfirm(false)}>
+            <div
+              className="modal-content"
+              ref={settleModalRef}
+              style={{ position: 'absolute', left: 0, right: 0, margin: '0 auto' }}
+              onClick={e => e.stopPropagation()}
+            >
+              <h3>Confirm Settle</h3>
+              <p style={{ marginBottom: '1.5em', color: '#333' }}>{settleMessage}</p>
+              <div className="modal-actions">
+                <button onClick={confirmSettle}>Yes, Settle</button>
+                <button onClick={() => setShowSettleConfirm(false)}>Cancel</button>
               </div>
             </div>
           </div>

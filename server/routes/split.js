@@ -287,10 +287,10 @@ router.post('/expenses/:expenseId/settle', auth, async (req, res) => {
     if (groupExpense.creator.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Only the creator can settle the group expense' });
     }
-    // Only allow settling if all members have paid
+    const { force } = req.body;
     const allPaid = groupExpense.members.every(member => member.status === 'paid');
-    if (!allPaid) {
-      return res.status(400).json({ message: 'All members must pay before settling' });
+    if (!allPaid && !force) {
+      return res.status(400).json({ message: 'Not all members have paid. Are you sure you want to settle?' });
     }
     groupExpense.status = 'completed';
     await groupExpense.save();
